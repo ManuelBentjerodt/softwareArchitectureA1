@@ -25,15 +25,15 @@ nano.db.create(dbName).then(response => {
 const myDatabase = nano.use(dbName);
 
 // Crear un nuevo documento en tu base de datos.
-const newDocument = {
-    _id: 'my_first_document',
-    title: 'Hello, world!',
-    content: 'This is my first document in CouchDB!'
-};
-myDatabase.insert(newDocument).then(response => {
-    console.log('Document inserted!', response);
-}).catch(error => {
-    console.error('Error inserting document', error);
-});
+// const newDocument = {
+//     _id: 'my_first_document',
+//     title: 'Hello, world!',
+//     content: 'This is my first document in CouchDB!'
+// };
+// myDatabase.insert(newDocument).then(response => {
+//     console.log('Document inserted!', response);
+// }).catch(error => {
+//     console.error('Error inserting document', error);
+// });
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
