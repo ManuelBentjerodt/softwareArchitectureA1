@@ -1,0 +1,25 @@
+# .gitignore
+
+# Ignora la carpeta node_modules en cualquier nivel de profundidad
+**/node_modules
+
+# Ignora archivos .env en cualquier nivel de profundidad
+**/.env
+
+# Ignora el directorio de compilación de React
+client/build
+
+# Ignora el directorio de logs de npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignora la cache de babel
+.babel.json
+
+# Ignora los archivos de configuración de tu editor
+*.swp
+*.swo
+*.swn
+*.idea/
+.vscode/
