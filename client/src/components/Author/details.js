@@ -1,6 +1,7 @@
 // AuthorDetails.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import GoBack from '../goBack';
 
 function AuthorDetails() {
     const { id } = useParams();
@@ -20,9 +21,9 @@ function AuthorDetails() {
 
     return (
         <div>
-
             <h1>{authorDetails.name}</h1>
             <p>{authorDetails.shortDescription}</p>
+            <GoBack />
         </div>
     );
 }

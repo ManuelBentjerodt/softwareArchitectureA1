@@ -44,11 +44,47 @@ app.get('/api/authors/:id', async (req, res) => {
         const id = req.params.id;
         const author = await myDatabase.get(id);
         res.json(author);
+
     } catch (error) {
         console.error('Error getting author', error);
         res.status(500).send('Error getting author');
     }
 });
+
+app.post('/api/authors/new', async (req, res) => {
+    try {
+        const newAuthor = {
+            name: req.body.name,
+            dateOfBirth: req.body.dateOfBirth,
+            countryOfOrigin: req.body.countryOfOrigin,
+            shortDescription: req.body.shortDescription,
+        };
+
+        const response = await myDatabase.insert(newAuthor);
+        res.json(response);
+
+    } catch (error) {
+        console.error('Error creating new author', error);
+        res.status(500).send('Error creating new author');
+    }
+});
+
+app.delete('/api/authors/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const author = await myDatabase.get(id);
+
+        await myDatabase.destroy(id, author._rev);
+
+        res.status(200).send('Author deleted');
+
+    } catch (error) {
+        console.error('Error deleting author', error);
+        res.status(500).send('Error deleting author');
+    }
+});
+
+
 
 
 
