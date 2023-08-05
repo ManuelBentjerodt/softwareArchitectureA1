@@ -1,30 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AuthorIndex from './components/Author/index';
+import AuthorDetails from './components/Author/details';
 
 function App() {
-  const [data, setData] = useState([])
-
-  useEffect( () => {
-    const fetchData = async () => {
-      const response = await fetch('/api');
-      const body = await response.json();
-      setData(body);
-    }
-
-    fetchData();
-    
-  }, []);
-
-  console.log(data);
-
   return (
-    <div>
-      {typeof data === "undefined" ? (
-        <p> loading </p>
-      ) : (
-       <p> something</p>
-      )}
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<AuthorIndex />} />
+        <Route path="/authors/:id" element={<AuthorDetails />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
