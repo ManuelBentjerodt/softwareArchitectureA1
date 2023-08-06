@@ -1,7 +1,7 @@
 import React from 'react'
 
 function Populate() {
-    
+
     const handler = async () => {
         try {
             const response = await fetch('/api/populate', {
@@ -18,14 +18,14 @@ function Populate() {
             console.error('Error adding new author', error);
         }
     }
-  return (
+    return (
 
-    <div>
-        <button onClick={handler}>
-            populate
-        </button>
-    </div>
-  )
+        <div>
+            <button onClick={handler}>
+                populate
+            </button>
+        </div>
+    )
 }
 
 export default Populate
