@@ -7,13 +7,16 @@ import BookDetails from './components/Book/details';
 import CreateBook from './components/Book/create';
 import CreateReview from './components/Review/create';
 import GoBack from './components/goBack';
+import Index from './components/index';
 
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<AuthorIndex />} />
+        {/* <Route path="/" element={<AuthorIndex />} /> */}
+        <Route path="/" element={<Index />} />
+        <Route path="/authors/all" element={<AuthorIndex />} />
         <Route path="/authors/new" element={<CreateAuthor />} />
         <Route path="/authors/:authorId" element={<AuthorDetails />} />
         <Route path="/authors/:authorId/books/:bookId" element={<BookDetails />} />

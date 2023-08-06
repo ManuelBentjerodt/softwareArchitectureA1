@@ -32,7 +32,6 @@ function AuthorIndex() {
         }
     };
 
-
     return (
         <div>
             <ul>

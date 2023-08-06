@@ -34,7 +34,7 @@ const myDatabase = nano.use(dbName);
 // ▀  ▀ ▀▀▀▀   ▀   ▀  ▀ ▀▀▀▀ ▀  ▀ ▀▀▀ 
 
 app.get('/api/authors/all', (req, res) => {
-    myDatabase.list({ include_docs: true}).then(body => {
+    myDatabase.list({ include_docs: true }).then(body => {
         console.log('All documents');
         res.send(body);
     }).catch(error => {
@@ -61,6 +61,7 @@ app.post('/api/authors/new', async (req, res) => {
             dateOfBirth: req.body.dateOfBirth,
             countryOfOrigin: req.body.countryOfOrigin,
             shortDescription: req.body.shortDescription,
+            books: req.body.books || []
         };
 
         const response = await myDatabase.insert(newAuthor);
@@ -171,6 +172,40 @@ app.patch('/api/authors/:authorId/books/:bookId/reviews/new', async (req, res) =
     } catch (error) {
         console.error('Error adding new review', error);
         res.status(500).send('Error adding new review');
+    }
+});
+
+
+
+// █▀▀ █ █ ▀▀█▀▀ █▀▀█ █▀▀█ 
+// █▀▀ ▄▀▄   █   █▄▄▀ █▄▄█ 
+// ▀▀▀ ▀ ▀   ▀   ▀  ▀ ▀  ▀
+
+app.post('/api/populate', async (req, res) => {
+
+    try {
+        const fs = require('fs');
+        fs.readFile('MOCK_DATA.json', 'utf8', (err, data) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send('Error reading data file');
+            } else {
+                const dataObj = JSON.parse(data);
+
+                myDatabase.bulk({docs: dataObj}, function(err, result) {
+                    if (err) {
+                        console.error('Error populating database', err);
+                        res.status(500).send('Error populating database');
+                    } else {
+                        console.log(result);
+                        res.status(200).send('Data populated successfully');
+                    }
+                });
+            }
+        });
+    } catch (error) {
+        console.error('Error populating database', error);
+        res.status(500).send('Error populating database');
     }
 });
 
