@@ -175,6 +175,23 @@ app.patch('/api/authors/:authorId/books/:bookId/reviews/new', async (req, res) =
     }
 });
 
+app.delete('/api/authors/:authorId/books/:bookId/reviews/:reviewId', async (req, res) => {
+    try {
+        const { authorId, bookId, reviewId } = req.params;
+        const author = await myDatabase.get(authorId);
+        const book = author.books.find(book => book._id === bookId);
+
+        book.reviews = book.reviews.filter(review => review._id !== reviewId);
+
+        const response = await myDatabase.insert(author);
+
+        res.json(response);
+    } catch (error) {
+        console.error('Error deleting review', error);
+        res.status(500).send('Error deleting review');
+    }
+});
+
 
 
 // █▀▀ █ █ ▀▀█▀▀ █▀▀█ █▀▀█ 

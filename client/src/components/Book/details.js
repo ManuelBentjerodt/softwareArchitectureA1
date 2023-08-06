@@ -19,6 +19,23 @@ function BookDetails() {
         console.log(bookDetails);
     }, [authorId, bookId]);
 
+    const handleDelete = async (reviewId) => {
+        const response = await fetch(`/api/authors/${authorId}/books/${bookId}/reviews/${reviewId}`, {
+            method: 'DELETE',
+        });
+    
+        if (response.ok) {
+            // Si la eliminación fue exitosa, actualiza la lista de reviews
+            setBookDetails({
+                ...bookDetails,
+                reviews: bookDetails.reviews.filter((review) => review._id !== reviewId),
+            });
+        } else {
+            console.error('Error deleting review');
+        }
+    };
+    
+
     return (
         <div>
             <h1>Name: {bookDetails.name}</h1>
@@ -31,8 +48,10 @@ function BookDetails() {
                         <p>Review: {review.review}</p>
                         <p>Rating: {review.rating}</p>
                         <p>Up votes: {review.upVotes}</p>
+                        <button onClick={() => handleDelete(review._id)}>Delete</button>
                     </li>
                 ))}
+
             </ul>
             <Link to={`/authors/${authorId}/books/${bookId}/reviews/new`}>
                 create review
