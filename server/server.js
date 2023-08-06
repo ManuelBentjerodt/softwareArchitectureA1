@@ -87,6 +87,26 @@ app.delete('/api/authors/:id', async (req, res) => {
 
 
 
+app.get('/api/authors/:authorId/books/:bookId', async (req, res) => {
+    try {
+        const { authorId, bookId } = req.params;
+        const author = await myDatabase.get(authorId);
+        const book = author.books.find(book => book._id === bookId);
+
+        console.log(author.books);
+        if (book) {
+            res.json(book);
+        } else {
+            res.status(404).send('Book not found');
+        }
+
+    } catch (error) {
+        console.error('Error retrieving book', error);
+        res.status(500).send('Error retrieving book');
+    }
+});
+
+
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
 
