@@ -5,20 +5,34 @@ import { Link } from 'react-router-dom';
 import GoBack from '../goBack';
 
 function AuthorDetails() {
-    const { id } = useParams();
+    const { authorId } = useParams();
     const [authorDetails, setAuthorDetails] = useState({});
 
     useEffect(() => {
         const getAuthorDetails = async () => {
-            const response = await fetch(`/api/authors/${id}`);
+            const response = await fetch(`/api/authors/${authorId}`);
             const body = await response.json();
-            console.log(body);
-
-            setAuthorDetails(body);
+            setAuthorDetails({ ...body, books: body.books || [] });
         };
 
         getAuthorDetails();
-    }, [id]);
+    }, [authorId]);
+
+    const handleDelete = async (idBook) => {
+        const response = await fetch(`/api/authors/${authorId}/books/${idBook}`, {
+            method: 'DELETE',
+        });
+
+        if (response.ok) {
+            // Si la eliminación fue exitosa, actualiza la lista de libros
+            setAuthorDetails({
+                ...authorDetails,
+                books: authorDetails.books.filter((book) => book._id !== idBook),
+            });
+        } else {
+            console.error('Error deleting book');
+        }
+    };
 
     return (
         <div>
@@ -28,11 +42,14 @@ function AuthorDetails() {
             <ul>
                 {authorDetails.books && authorDetails.books.map(book => (
                     <li key={book._id}>
-                        <Link to={`/authors/${id}/books/${book._id}`}>{book.name}</Link>
+                        <Link to={`/authors/${authorId}/books/${book._id}`}>{book.name}</Link>
+                        <button onClick={() => handleDelete(book._id)}>Delete</button>
                     </li>
                 ))}
             </ul>
-            <GoBack />
+            <Link to={`/authors/${authorId}/books/new`}>
+                create book
+            </Link>
         </div>
     );
 }

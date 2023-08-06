@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import GoBack from '../goBack';
+import { useParams, Link } from 'react-router-dom';
 
 function BookDetails() {
     const { authorId, bookId } = useParams();
@@ -35,7 +34,9 @@ function BookDetails() {
                     </li>
                 ))}
             </ul>
-            <GoBack />
+            <Link to={`/authors/${authorId}/books/${bookId}/reviews/new`}>
+                create review
+            </Link>
         </div>
     );
 }

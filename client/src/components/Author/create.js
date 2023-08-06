@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
 const CreateAuthor = () => {
     const navigate = useNavigate(); 
     const [author, setAuthor] = useState({
+        _id: uuidv4(),
         name: '',
         dateOfBirth: '',
         countryOfOrigin: '',
         shortDescription: '',
+        books: [],
     });
 
     const handleChange = e => {
@@ -21,7 +24,6 @@ const CreateAuthor = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(author);
         // Here you would usually send the author object to your server or API
         const createAuthor = async () => {
             const response = await fetch('/api/authors/new', {
@@ -32,9 +34,7 @@ const CreateAuthor = () => {
                 body: JSON.stringify(author),
             });
             const body = await response.json();
-            console.log(body);
         };
-        console.log("createAuthor");
         createAuthor();
         navigate(-1);
     };

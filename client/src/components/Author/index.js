@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import AuthorDetails from './details';
-import CreateAuthor from './create';
+
 
 function AuthorIndex() {
     const [authors, setAuthors] = useState([]);
@@ -14,21 +13,20 @@ function AuthorIndex() {
             const fetchedAuthors = body.rows.map(row => row.doc);
 
             setAuthors(fetchedAuthors);
-            console.log(fetchedAuthors);
         };
 
         getAllAuthors();
     }, []);
 
 
-    const handleDelete = async (id) => {
-        const response = await fetch(`/api/authors/${id}`, {
+    const handleDelete = async (authorId) => {
+        const response = await fetch(`/api/authors/${authorId}`, {
             method: 'DELETE',
         });
 
         if (response.ok) {
             // Si la eliminación fue exitosa, actualiza la lista de autores
-            setAuthors(authors.filter(author => author._id !== id));
+            setAuthors(authors.filter(author => author._id !== authorId));
         } else {
             console.error('Error deleting author');
         }
@@ -47,9 +45,8 @@ function AuthorIndex() {
             </ul>
 
             <Link to={"/authors/new"}>
-                new
+                create author
             </Link>
-
 
         </div>
     );
