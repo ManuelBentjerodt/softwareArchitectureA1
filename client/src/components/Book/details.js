@@ -46,7 +46,7 @@ function BookDetails() {
                 {bookDetails.reviews && bookDetails.reviews.map(review => (
                     <li key={review._id}>
                         <p>Review: {review.review}</p>
-                        <p>Rating: {review.rating}</p>
+                        <p>Rating: {review.score}</p>
                         <p>Up votes: {review.upVotes}</p>
                         <button onClick={() => handleDelete(review._id)}>Delete</button>
                     </li>

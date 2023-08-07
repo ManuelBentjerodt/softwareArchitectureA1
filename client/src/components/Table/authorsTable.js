@@ -27,7 +27,7 @@ function AuthorsTable() {
                     accessor: 'col2',
                 },
                 {
-                    Header: 'Avarage score',
+                    Header: 'Average score',
                     accessor: 'col3',
                 },
                 {
@@ -39,7 +39,7 @@ function AuthorsTable() {
             const authorsData = fetchedAuthors.map(author => {
                 const averageRating = author.books.reduce((acc1, book) => {
                     const { sum, count } = book.reviews.reduce((acc2, review) => {
-                        return { sum: acc2.sum + review.rating, count: acc2.count + 1 };
+                        return { sum: acc2.sum + review.score, count: acc2.count + 1 };
                     }, { sum: 0, count: 0 });
 
                     return { sum: acc1.sum + sum, count: acc1.count + count };
@@ -47,12 +47,15 @@ function AuthorsTable() {
 
                 const finalAverageRating = averageRating.count > 0 ? averageRating.sum / averageRating.count : 1;
 
+                const totalSales = author.books.reduce((acc, book) => {
+                    return acc + book.salesPerYear.reduce((acc2, year) => acc2 + year.sales, 0);
+                }, 0);
 
                 return {
                     col1: author.name,
                     col2: author.books.length,
                     col3: finalAverageRating.toFixed(2),
-                    col4: author.books.reduce((acc, book) => acc + book.numberOfSales, 0),
+                    col4: totalSales
                 }
             });
 
