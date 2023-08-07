@@ -1,7 +1,62 @@
 import React from 'react';
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from 'react-table';
 
+function DefaultColumnFilter({
+    column: { filterValue, preFilteredRows, setFilter },
+}) {
+    const count = preFilteredRows.length
+
+    return (
+        <input
+            value={filterValue || ''}
+            onChange={e => {
+                setFilter(e.target.value || undefined)
+            }}
+            onClick={e => {
+                e.stopPropagation();
+            }}
+            placeholder={`Search in ${count} registers...`}
+        />
+    )
+}
+
+
+function fuzzyTextFilterFn(rows, id, filterValue) {
+    return rows.filter(row => {
+        const rowValue = row.values[id]
+        return rowValue !== undefined
+            ? String(rowValue)
+                .toLowerCase()
+                .includes(String(filterValue).toLowerCase())
+            : true
+    })
+}
+
+function filterGreaterThan(rows, id, filterValue) {
+    return rows.filter(row => {
+        const rowValue = row.values[id]
+        return rowValue >= filterValue
+    })
+}
+
 function Table({ columns, data }) {
+    const filterTypes = React.useMemo(
+        () => ({
+            fuzzyText: fuzzyTextFilterFn,
+            text: (rows, id, filterValue) => {
+                return rows.filter(row => {
+                    const rowValue = row.values[id]
+                    return rowValue !== undefined
+                        ? String(rowValue)
+                            .toLowerCase()
+                            .startsWith(String(filterValue).toLowerCase())
+                        : true
+                })
+            },
+        }),
+        []
+    )
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -23,8 +78,10 @@ function Table({ columns, data }) {
             columns,
             data,
             initialState: { pageIndex: 0 },
+            defaultColumn: { Filter: DefaultColumnFilter }, 
+            filterTypes,
         },
-        useFilters,
+        useFilters, 
         useGlobalFilter,
         useSortBy,
         usePagination
@@ -37,7 +94,7 @@ function Table({ columns, data }) {
                     type="text"
                     value={globalFilter || ''}
                     onChange={e => setGlobalFilter(e.target.value)}
-                    placeholder="Search..."
+                    placeholder="Search globaly..."
                 />
             </div>
             <table {...getTableProps()}>
@@ -47,14 +104,14 @@ function Table({ columns, data }) {
                             {headerGroup.headers.map(column => (
                                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                                     {column.render('Header')}
-                                    {/* Add a sort direction indicator */}
                                     <span>
                                         {column.isSorted
                                             ? column.isSortedDesc
                                                 ? ' 🔽'
                                                 : ' 🔼'
-                                            : ''}
+                                            : ' ↕️'}
                                     </span>
+                                    <div>{column.canFilter ? column.render('Filter') : null}</div>
                                 </th>
                             ))}
                         </tr>
@@ -110,7 +167,7 @@ function Table({ columns, data }) {
                 >
                     {[10, 20, 30, 40, 50].map(pageSize => (
                         <option key={pageSize} value={pageSize}>
-                            Mostrar {pageSize}
+                            Show {pageSize}
                         </option>
                     ))}
                 </select>
