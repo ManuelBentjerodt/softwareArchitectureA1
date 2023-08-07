@@ -1,12 +1,44 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { Link } from 'react-router-dom';
 import Table from './table';
 
 function TopRated() {
     const [books, setBooks] = useState([]);
-    const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
 
-    const columnsMemo = useMemo(() => columns, [columns]);
+    const columns = React.useMemo(
+        () => [
+            {
+                Header: 'Position',
+                accessor: 'col0',
+            },
+            {
+                Header: 'Name',
+                accessor: 'col1',
+                Cell: ({ cell: { value }, row: { original } }) => (
+                    <Link to={`/authors/${value.authorId}/books/${value._id}`}>{value.name}</Link>
+                ),
+            },
+            {
+                Header: 'Average rating',
+                accessor: 'col2',
+            },
+            {
+                Header: 'Highest review',
+                accessor: 'col3',
+            },
+            {
+                Header: 'Lowest review',
+                accessor: 'col4',
+            },
+            {
+                Header: 'Most popular review',
+                accessor: 'col5',
+            }
+        ],
+        []
+    );
+
     const dataMemo = useMemo(() => data, [data]);
     
     useEffect(() => {
@@ -29,44 +61,19 @@ function TopRated() {
                     mostUpvotedReview
                 };
             });
+
             booksWithAverageRating.sort((a, b) => b.averageRating - a.averageRating);
             const top10RatedBooks = booksWithAverageRating.slice(0, 10);
             const booksToColumns = top10RatedBooks.map(book => {
                 return {
                     col0: (top10RatedBooks.indexOf(book) + 1).toString(),
-                    col1: book.name,
+                    col1: book,
                     col2: book.averageRating.toFixed(2) + '/5',
                     col3: book.bestReview.review + ' ' + book.bestReview.score + '/5',
                     col4: book.worstReview.review + ' ' + book.worstReview.score + '/5',
                     col5: book.mostUpvotedReview.review + ' ' + book.mostUpvotedReview.score + '/5' 
                 }
             });
-            setColumns([
-                {
-                    Header: 'Position',
-                    accessor: 'col0',
-                },
-                {
-                    Header: 'Name',
-                    accessor: 'col1',
-                },
-                {
-                    Header: 'Average rating',
-                    accessor: 'col2',
-                },
-                {
-                    Header: 'Highest review',
-                    accessor: 'col3',
-                },
-                {
-                    Header: 'Lowest review',
-                    accessor: 'col4',
-                },
-                {
-                    Header: 'Most popular review',
-                    accessor: 'col5',
-                }
-            ]);
             setData(booksToColumns);
             setBooks(body);
         };
@@ -74,10 +81,9 @@ function TopRated() {
     }, []);
     return (
         <div>
-            <Table columns={columnsMemo} data={dataMemo} />
+            <Table columns={columns} data={dataMemo} />
         </div>
     );
 }
-
 
 export default TopRated;
