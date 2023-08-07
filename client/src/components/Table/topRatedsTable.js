@@ -15,11 +15,11 @@ function TopRated() {
             const body = await response.json();
             const booksWithAverageRating = body.map(book => {
                 const totalReviews = book.reviews.length;
-                const totalRating = book.reviews.reduce((sum, review) => sum + review.rating, 0);
+                const totalRating = book.reviews.reduce((sum, review) => sum + review.score, 0);
                 const averageRating = totalRating / totalReviews || 0;
-                const bestReview = book.reviews.reduce((best, review) => review.rating > best.rating ? review : best, { rating: -1 });
-                const worstReview = book.reviews.reduce((worst, review) => review.rating < worst.rating ? review : worst, { rating: 11 });
-                const mostUpvotedReview = book.reviews.reduce((mostUpvoted, review) => review.upVotes > mostUpvoted.upVotes ? review : mostUpvoted, { upVotes: -1 });
+                const bestReview = book.reviews.reduce((best, review) => review.score > best.score ? review : best, { score: -1 });
+                const worstReview = book.reviews.reduce((worst, review) => review.score < worst.score ? review : worst, { score: 11 });
+                const mostUpvotedReview = book.reviews.reduce((mostUpvoted, review) => review.number_of_upvotes > mostUpvoted.number_of_upvotes ? review : mostUpvoted, { number_of_upvotes: -1 });
 
                 return {
                     ...book,
@@ -36,9 +36,9 @@ function TopRated() {
                     col0: (top10RatedBooks.indexOf(book) + 1).toString(),
                     col1: book.name,
                     col2: book.averageRating.toFixed(2) + '/5',
-                    col3: book.bestReview.review + ' ' + book.bestReview.rating + '/5',
-                    col4: book.worstReview.review + ' ' + book.worstReview.rating + '/5',
-                    col5: book.mostUpvotedReview.review + ' ' + book.mostUpvotedReview.rating + '/5' 
+                    col3: book.bestReview.review + ' ' + book.bestReview.score + '/5',
+                    col4: book.worstReview.review + ' ' + book.worstReview.score + '/5',
+                    col5: book.mostUpvotedReview.review + ' ' + book.mostUpvotedReview.score + '/5' 
                 }
             });
             setColumns([
