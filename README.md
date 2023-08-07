@@ -1,3 +1,5 @@
-Intsalacion de paquetes
+Package installation, inside the client and server folders run the command: 
 
-Para
+```
+npm i
+```
