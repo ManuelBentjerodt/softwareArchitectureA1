@@ -88,6 +88,37 @@ app.delete('/api/authors/:authorId', async (req, res) => {
     }
 });
 
+app.patch('/api/authors/:authorId/edit', async (req, res) => {
+    try {
+        const authorId = req.params.authorId;
+        const updatedAuthorData = {
+            name: req.body.name,
+            dateOfBirth: req.body.dateOfBirth,
+            countryOfOrigin: req.body.countryOfOrigin,
+            shortDescription: req.body.shortDescription,
+            books: req.body.books || []
+        };
+
+        const currentDoc = await myDatabase.get(authorId);
+
+        const updatedDoc = { ...currentDoc, ...updatedAuthorData };
+
+        const response = await myDatabase.insert(updatedDoc);
+
+        res.json(response);
+
+    } catch (error) {
+        if (error.code === 'EDOCMISSING') {
+            res.status(404).send('Author not found');
+        } else {
+            console.error('Error updating author', error);
+            res.status(500).send('Error updating author');
+        }
+    }
+});
+
+
+
 // █▀▀▄ █▀▀█ █▀▀█ █ █ █▀▀ 
 // █▀▀▄ █  █ █  █ █▀▄ ▀▀█ 
 // ▀▀▀  ▀▀▀▀ ▀▀▀▀ ▀ ▀ ▀▀▀ 

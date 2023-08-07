@@ -9,14 +9,11 @@ function BookDetails() {
         const getBookDetails = async () => {
             const response = await fetch(`/api/authors/${authorId}/books/${bookId}`);
             const body = await response.json();
-            console.log(body);
             setBookDetails(body);
+            console.log(body)
         };
-
-        console.log(bookId);
-
         getBookDetails();
-        console.log(bookDetails);
+        
     }, [authorId, bookId]);
 
     const handleDelete = async (reviewId) => {
@@ -30,6 +27,7 @@ function BookDetails() {
                 ...bookDetails,
                 reviews: bookDetails.reviews.filter((review) => review._id !== reviewId),
             });
+            
         } else {
             console.error('Error deleting review');
         }
@@ -40,14 +38,14 @@ function BookDetails() {
         <div>
             <h1>Name: {bookDetails.name}</h1>
             <p>Dare of publication: {bookDetails.dateOfPublication}</p>
-            <p>Number of sales: {bookDetails.numberOfSales}</p>
-            <h2>Reviews</h2>:
+            <p>Number of sales: {bookDetails.salesPerYear ? bookDetails.salesPerYear.reduce((total, yearSales) => total + yearSales.sales, 0) : 'Loading...'}</p>
+            <h2>Reviews:</h2>
             <ul>
                 {bookDetails.reviews && bookDetails.reviews.map(review => (
                     <li key={review._id}>
                         <p>Review: {review.review}</p>
                         <p>Rating: {review.score}</p>
-                        <p>Up votes: {review.upVotes}</p>
+                        <p>Up votes: {review.number_of_upvotes}</p>
                         <button onClick={() => handleDelete(review._id)}>Delete</button>
                     </li>
                 ))}

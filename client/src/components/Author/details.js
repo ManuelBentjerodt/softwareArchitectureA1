@@ -38,6 +38,7 @@ function AuthorDetails() {
         <div>
             <h1>Name: {authorDetails.name}</h1>
             <p>Description: {authorDetails.shortDescription}</p>
+            <Link to={`/authors/${authorId}/edit`}>Edit</Link>
             <h2>books:</h2>
             <ul>
                 {authorDetails.books && authorDetails.books.map(book => (

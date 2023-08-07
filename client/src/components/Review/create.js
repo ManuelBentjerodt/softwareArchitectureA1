@@ -10,8 +10,8 @@ const CreateReview = () => {
     const [review, setReview] = useState({
         _id: uuidv4(),
         review: '',
-        score: '',
-        upVotes: 0,
+        score: 1,
+        number_of_upvotes: 0,
     });
 
     const handleChange = e => {
@@ -50,7 +50,7 @@ const CreateReview = () => {
                 </label>
                 <label>
                     Score:
-                    <input type="number" name="score" min={1} max={5} defaultValue={1} value={review.score} onChange={handleChange} required />
+                    <input type="number" name="score" min={1} max={5} value={review.score} onChange={handleChange} required />
                 </label>
                 <button type="submit">Create</button>
             </form>
