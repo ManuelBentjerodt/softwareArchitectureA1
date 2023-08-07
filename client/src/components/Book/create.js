@@ -58,10 +58,10 @@ const CreateBook = () => {
                     Date of Publication:
                     <input type="date" name="dateOfPublication" value={book.dateOfPublication} onChange={handleChange} required />
                 </label>
-                <label>
+                {/* <label>
                     Number of Sales:
                     <input type="number" name="numberOfSales" value={book.numberOfSales} onChange={handleChange} required />
-                </label>
+                </label> */}
                 <button type="submit">Create</button>
             </form>
         </div>

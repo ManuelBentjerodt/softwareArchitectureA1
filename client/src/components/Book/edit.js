@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
+import formatDate from "../Util/formatDate";
 
 const EditBook = () => {
     const navigate = useNavigate(); 
-    const { authorId } = useParams();
-    const [book, setBook] = useState({
-        _id: uuidv4(),
-        name: '',
-        summary: '',
-        dateOfPublication: '',
-        numberOfSales: 0,
-        reviews: [],
-    });
+    const { authorId, bookId } = useParams();
+    const [book, setBook] = useState(null);
+
+    useEffect(() => {
+        const fetchBook = async () => {
+            const response = await fetch(`/api/authors/${authorId}/books/${bookId}`);
+            const data = await response.json();
+            setBook(data);
+        }
+        fetchBook();
+    }, [authorId, bookId]);
 
     const handleChange = e => {
         setBook({
@@ -25,9 +25,8 @@ const EditBook = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(authorId);
-        const createBook = async () => {
-            const response = await fetch(`/api/authors/${authorId}/books`, {
+        const updateBook = async () => {
+            const response = await fetch(`/api/authors/${authorId}/books/${bookId}/edit`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,14 +36,15 @@ const EditBook = () => {
             const body = await response.json();
             console.log(body);
         };
-        console.log("createBook");
-        createBook();
+        updateBook();
         navigate(-1);
     };
 
+    if (!book) return null;  // si el libro no se ha cargado todavía, no renderizar nada
+
     return (
         <div>
-            <h1>Create Author</h1>
+            <h1>Edit Book</h1>
             <form onSubmit={handleSubmit}>
                 <label>
                     Name:
@@ -56,13 +56,13 @@ const EditBook = () => {
                 </label>
                 <label>
                     Date of Publication:
-                    <input type="date" name="dateOfPublication" value={book.dateOfPublication} onChange={handleChange} required />
+                    <input type="date" name="dateOfPublication" value={formatDate(book.dateOfPublication)} onChange={handleChange} required />
                 </label>
-                <label>
+                {/* <label>
                     Number of Sales:
                     <input type="number" name="numberOfSales" value={book.numberOfSales} onChange={handleChange} required />
-                </label>
-                <button type="submit">Create</button>
+                </label> */}
+                <button type="submit">Update</button>
             </form>
         </div>
     );

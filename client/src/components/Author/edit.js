@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
+import formatDate from "../Util/formatDate";
 
 const EditAuthor = () => {
     const navigate = useNavigate();
@@ -28,21 +29,6 @@ const EditAuthor = () => {
             [e.target.name]: e.target.value,
         });
     };
-
-    function formatDate(date) {
-        const d = new Date(date);
-        let month = '' + (d.getMonth() + 1);
-        let day = '' + d.getDate();
-        let year = d.getFullYear();
-    
-        if (month.length < 2) 
-            month = '0' + month;
-        if (day.length < 2) 
-            day = '0' + day;
-    
-        return [year, month, day].join('-');
-    }
-
 
     const handleSubmit = e => {
         e.preventDefault();

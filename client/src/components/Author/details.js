@@ -38,12 +38,21 @@ function AuthorDetails() {
         <div>
             <h1>Name: {authorDetails.name}</h1>
             <p>Description: {authorDetails.shortDescription}</p>
-            <Link to={`/authors/${authorId}/edit`}>Edit</Link>
+            <Link to={`/authors/${authorId}/edit`}>
+                <button>
+                    Edit
+                </button>
+            </Link>
             <h2>books:</h2>
             <ul>
                 {authorDetails.books && authorDetails.books.map(book => (
                     <li key={book._id}>
-                        <Link to={`/authors/${authorId}/books/${book._id}`}>{book.name}</Link>
+                        <Link to={`/authors/${authorId}/books/${book._id}`}>{book.name} </Link>
+                        <Link to={`/authors/${authorId}/books/${book._id}/edit`}>
+                            <button>
+                                Edit
+                            </button>
+                        </Link>
                         <button onClick={() => handleDelete(book._id)}>Delete</button>
                     </li>
                 ))}

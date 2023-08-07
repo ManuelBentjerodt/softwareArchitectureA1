@@ -38,12 +38,16 @@ function AuthorIndex() {
                 {authors.map(author => (
                     <li key={author._id}>
                         <Link to={`/authors/${author._id}`}>{author.name} </Link>
-                        <Link to={`/authors/${author._id}/edit`}>Edit</Link>
+                        <Link to={`/authors/${author._id}/edit`}>
+                            <button>
+                                Edit
+                            </button>
+                        </Link>
                         <button onClick={() => handleDelete(author._id)}>Delete</button>
                     </li>
                 ))}
             </ul>
-  
+
             <Link to={"/authors/new"}>create author</Link>
 
         </div>

@@ -163,6 +163,38 @@ app.patch('/api/authors/:authorId/books', async (req, res) => {
     }
 });
 
+app.patch('/api/authors/:authorId/books/:bookId/edit', async (req, res) => {
+    try {
+        const { authorId, bookId } = req.params;
+        const updatedBook = req.body;
+        const author = await myDatabase.get(authorId);
+
+        if (!author.books) {
+            res.status(404).send('No books found for this author');
+            return;
+        }
+
+        // Encuentra el índice del libro en la lista de libros del autor
+        const bookIndex = author.books.findIndex(book => book._id === bookId);
+
+        if (bookIndex === -1) {
+            res.status(404).send('Book not found');
+            return;
+        }
+
+        // Actualiza el libro en la lista de libros del autor
+        author.books[bookIndex] = updatedBook;
+
+        const response = await myDatabase.insert(author);
+
+        res.json(response);
+    } catch (error) {
+        console.error('Error updating book', error);
+        res.status(500).send('Error updating book');
+    }
+});
+
+
 app.get('/api/books/all', (req, res) => {
     myDatabase.list({ include_docs: true }).then(body => {
         
