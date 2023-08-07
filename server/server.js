@@ -226,6 +226,20 @@ app.delete('/api/authors/:authorId/books/:bookId', async (req, res) => {
 // █▄▄▀ █▀▀  █▄█   █  █▀▀ █▄█▄█ ▀▀█ 
 // ▀  ▀ ▀▀▀   ▀    ▀  ▀▀▀  ▀ ▀  ▀▀▀
 
+app.get('/api/authors/:authorId/books/:bookId/reviews/:reviewId', async (req, res) => {
+    try {
+        const { authorId, bookId, reviewId } = req.params;
+        const author = await myDatabase.get(authorId);
+        const book = author.books.find(book => book._id === bookId);
+
+        const review = book.reviews.find(review => review._id === reviewId);
+
+        res.send(review);
+    } catch (error) {
+        console.error('Error deleting review', error);
+        res.status(500).send('Error deleting review');
+    }
+});
 
 app.patch('/api/authors/:authorId/books/:bookId/reviews/new', async (req, res) => {
     try {
@@ -263,6 +277,48 @@ app.delete('/api/authors/:authorId/books/:bookId/reviews/:reviewId', async (req,
     } catch (error) {
         console.error('Error deleting review', error);
         res.status(500).send('Error deleting review');
+    }
+});
+
+
+app.patch('/api/authors/:authorId/books/:bookId/reviews/:reviewId/edit', async (req, res) => {
+    try {
+        const { authorId, bookId, reviewId } = req.params;
+        const updatedReview = req.body;
+        const author = await myDatabase.get(authorId);
+
+        if (!author.books) {
+            res.status(404).send('No books found for this author');
+            return;
+        }
+
+        const book = author.books.find(book => book._id === bookId);
+
+        if (!book) {
+            res.status(404).send('Book not found');
+            return;
+        }
+
+        if (!book.reviews) {
+            res.status(404).send('No reviews found for this book');
+            return;
+        }
+
+        const reviewIndex = book.reviews.findIndex(review => review._id === reviewId);
+
+        if (reviewIndex === -1) {
+            res.status(404).send('Review not found');
+            return;
+        }
+
+        book.reviews[reviewIndex] = updatedReview;
+
+        const response = await myDatabase.insert(author);
+
+        res.json(response);
+    } catch (error) {
+        console.error('Error updating review', error);
+        res.status(500).send('Error updating review');
     }
 });
 

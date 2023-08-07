@@ -13,32 +13,38 @@ function BookDetails() {
             console.log(body)
         };
         getBookDetails();
-        
+
     }, [authorId, bookId]);
 
     const handleDelete = async (reviewId) => {
         const response = await fetch(`/api/authors/${authorId}/books/${bookId}/reviews/${reviewId}`, {
             method: 'DELETE',
         });
-    
+
         if (response.ok) {
             // Si la eliminación fue exitosa, actualiza la lista de reviews
             setBookDetails({
                 ...bookDetails,
                 reviews: bookDetails.reviews.filter((review) => review._id !== reviewId),
             });
-            
+
         } else {
             console.error('Error deleting review');
         }
     };
-    
+
 
     return (
         <div>
             <h1>Name: {bookDetails.name}</h1>
-            <p>Dare of publication: {bookDetails.dateOfPublication}</p>
+            <p>Summary: {bookDetails.summary}</p>
+            <p>Date of publication: {bookDetails.dateOfPublication}</p>
             <p>Number of sales: {bookDetails.salesPerYear ? bookDetails.salesPerYear.reduce((total, yearSales) => total + yearSales.sales, 0) : 'Loading...'}</p>
+            <Link to={`/authors/${authorId}/books/${bookId}/edit`}>
+                <button>
+                    Edit
+                </button>
+            </Link>
             <h2>Reviews:</h2>
             <ul>
                 {bookDetails.reviews && bookDetails.reviews.map(review => (
@@ -46,6 +52,11 @@ function BookDetails() {
                         <p>Review: {review.review}</p>
                         <p>Rating: {review.score}</p>
                         <p>Up votes: {review.number_of_upvotes}</p>
+                        <Link to={`/authors/${authorId}/books/${bookId}/reviews/${review._id}/edit`}>
+                            <button>
+                                Edit
+                            </button>
+                        </Link>
                         <button onClick={() => handleDelete(review._id)}>Delete</button>
                     </li>
                 ))}

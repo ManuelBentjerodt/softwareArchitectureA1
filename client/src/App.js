@@ -7,6 +7,7 @@ import EditAuthor from './components/Author/edit';
 import BookDetails from './components/Book/details';
 import CreateBook from './components/Book/create';
 import CreateReview from './components/Review/create';
+import EditReview from './components/Review/edit';
 import GoBack from './components/goBack';
 import Index from './components/index';
 import AuthorsTable from './components/Table/authorsTable';
@@ -29,6 +30,7 @@ function App() {
         <Route path="/authors/:authorId/books/:bookId/edit" element={<EditBook />} />
         <Route path="/authors/:authorId/books/new" element={<CreateBook />} />
         <Route path="/authors/:authorId/books/:bookId/reviews/new" element={<CreateReview />} />
+        <Route path="/authors/:authorId/books/:bookId/reviews/:reviewId/edit" element={<EditReview />} />
 
         <Route path="authorsTable" element={<AuthorsTable/>} />
         <Route path="/books/top" element={<TopRated />} />
