@@ -356,6 +356,29 @@ app.post('/api/populate', async (req, res) => {
     }
 });
 
+app.get('/api/search/:query', async (req, res) => {
+    try {
+        const { query } = req.params;
+
+        // Divide la cadena de consulta en palabras individuales
+        const words = query.split(' ');
+
+        const authors = await myDatabase.list({ include_docs: true });
+
+        const matchingBooks = authors.rows.flatMap(author => 
+            author.doc.books
+                .filter(book => words.every(word => book.summary.includes(word)))
+                .map(book => ({...book, authorId: author.id}))
+        );
+
+        res.json(matchingBooks);
+    } catch (error) {
+        console.error('Error searching books', error);
+        res.status(500).send('Error searching books');
+    }
+});
+
+
 
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
