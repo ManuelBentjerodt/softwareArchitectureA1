@@ -8,6 +8,7 @@ import CreateBook from './components/Book/create';
 import CreateReview from './components/Review/create';
 import GoBack from './components/goBack';
 import Index from './components/index';
+import AuthorsTable from './components/Table/authorsTable';
 
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
         <Route path="/authors/:authorId/books/:bookId" element={<BookDetails />} />
         <Route path="/authors/:authorId/books/new" element={<CreateBook />} />
         <Route path="/authors/:authorId/books/:bookId/reviews/new" element={<CreateReview />} />
+
+        <Route path="authorsTable" element={<AuthorsTable/>} />
       </Routes>
       <GoBack />
     </Router>
