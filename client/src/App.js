@@ -9,7 +9,7 @@ import CreateReview from './components/Review/create';
 import GoBack from './components/goBack';
 import Index from './components/index';
 import AuthorsTable from './components/Table/authorsTable';
-import TopRated from './components/Book/topRated';
+import TopRated from './components/Table/topRatedsTable';
 
 
 function App() {
