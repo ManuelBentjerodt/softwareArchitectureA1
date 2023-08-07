@@ -134,7 +134,6 @@ app.patch('/api/authors/:authorId/books', async (req, res) => {
 
 app.get('/api/books/all', (req, res) => {
     myDatabase.list({ include_docs: true }).then(body => {
-        console.log
         const books = body.rows.flatMap(author => author.doc.books);
         res.send(books);
     }).catch(error => {
