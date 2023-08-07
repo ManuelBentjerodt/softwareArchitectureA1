@@ -15,7 +15,7 @@ function DefaultColumnFilter({
             onClick={e => {
                 e.stopPropagation();
             }}
-            placeholder={`Buscar en ${count} registros...`}
+            placeholder={`Search in ${count} registers...`}
         />
     )
 }
@@ -94,7 +94,7 @@ function Table({ columns, data }) {
                     type="text"
                     value={globalFilter || ''}
                     onChange={e => setGlobalFilter(e.target.value)}
-                    placeholder="Buscar globalmente..."
+                    placeholder="Search globaly..."
                 />
             </div>
             <table {...getTableProps()}>
@@ -144,13 +144,13 @@ function Table({ columns, data }) {
                     {'>>'}
                 </button>{' '}
                 <span>
-                    Página{' '}
+                    Page{' '}
                     <strong>
                         {pageIndex + 1} de {pageOptions.length}
                     </strong>{' '}
                 </span>
                 <span>
-                    | Ir a la página:{' '}
+                    | Go to page:{' '}
                     <input
                         type="number"
                         defaultValue={pageIndex + 1}
@@ -167,7 +167,7 @@ function Table({ columns, data }) {
                 >
                     {[10, 20, 30, 40, 50].map(pageSize => (
                         <option key={pageSize} value={pageSize}>
-                            Mostrar {pageSize}
+                            Show {pageSize}
                         </option>
                     ))}
                 </select>
