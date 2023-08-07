@@ -6,7 +6,7 @@ Package installation, inside the client and server folders run the command:
 npm i
 ```
 
-In the main folder, create a file called .env and write:
+In the main folder, create a file called ==.env== and write:
 
 ```
 EXPRESS_PORT = 5000 
