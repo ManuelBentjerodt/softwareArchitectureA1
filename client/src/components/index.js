@@ -17,7 +17,7 @@ function Index() {
     return (
         <div>
             <Link to="/authors/all">Go to authors</Link>
-
+            <Link to="/authorsTable">Go to authors table</Link>
             <Populate />
             <Link to="/books/top">Top rated</Link>
         </div>
