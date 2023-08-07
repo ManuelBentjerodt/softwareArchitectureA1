@@ -1,24 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import Populate from './populate'
-import AuthorIndex from './Author/index';
 
 function Index() {
-    // useEffect(() => {
-    //     const getAllBooks = async () => {
-    //         const response = await fetch('/api/books/all');
-    //         const body = await response.json();
-    //         console.log(body);
 
-    //     }
-    //     getAllBooks();
-    // }, []);
     return (
-        <div>
-            <Link to="/authors/all">Go to authors</Link>
-            <Link to="/authorsTable">Go to authors table</Link>
+        <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
+            <Link to="/authors/all">Authors list</Link>
+            <Link to="/authorsTable">Authors table</Link>
+            <Link to="/books/top">Top 10 rated books table</Link>
             <Populate />
-            <Link to="/books/top">Top rated</Link>
         </div>
     )
 }
