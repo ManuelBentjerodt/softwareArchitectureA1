@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Populate from './populate'
-import TopRated from './Book/topRated';
 import AuthorIndex from './Author/index';
 
 function Index() {
