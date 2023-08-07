@@ -195,15 +195,21 @@ app.patch('/api/authors/:authorId/books/:bookId/edit', async (req, res) => {
 });
 
 
-app.get('/api/books/all', (req, res) => {
-    myDatabase.list({ include_docs: true }).then(body => {
-        
-        const books = body.rows.flatMap(author => author.doc.books);
-        res.send(books);
-    }).catch(error => {
-        console.error('Error retrieving documents', error);
-    });
-})
+app.get('/api/books/all', async (req, res) => {
+    try {
+        const authors = await myDatabase.list({ include_docs: true });
+
+        const books = authors.rows.flatMap(author => 
+            author.doc.books.map(book => ({...book, authorId: author.id}))
+        );
+
+        res.json(books);
+    } catch (error) {
+        console.error('Error retrieving all books', error);
+        res.status(500).send('Error retrieving all books');
+    }
+});
+
 
 
 app.delete('/api/authors/:authorId/books/:bookId', async (req, res) => {
