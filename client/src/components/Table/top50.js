@@ -37,7 +37,7 @@ function TopBooksTable() {
 
             setColumns([
                 {
-                    Header: 'Book Title',
+                    Header: 'Title',
                     accessor: 'col1',
                 },
                 {
@@ -49,12 +49,12 @@ function TopBooksTable() {
                     accessor: 'col3',
                 },
                 {
-                    Header: 'Author Total Sales',
+                    Header: "Author's total sales",
                     accessor: 'col4',
                     
                 },
                 {
-                    Header: 'Top 5 Year',
+                    Header: 'Top 5 on publication year',
                     accessor: 'col5',
                 }
             ]);
