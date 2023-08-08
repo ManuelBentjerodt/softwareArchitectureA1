@@ -60,7 +60,7 @@ function BookDetails() {
             <h1>Name: {bookDetails.name}</h1>
             <p>Summary: {bookDetails.summary}</p>
             <p>Date of publication: {bookDetails.dateOfPublication}</p>
-            <p>Total sales: {bookDetails.salesPerYear ? bookDetails.salesPerYear.reduce((total, yearSales) => total + yearSales.sales, 0) : 'Loading...'}</p>
+            <p>Total sales: {bookDetails.salesPerYear ? bookDetails.salesPerYear.reduce((total, yearSales) => total + parseInt(yearSales.sales), 0) : 'Loading...'}</p>
             <Link to={`/authors/${authorId}/books/${bookId}/edit`}>
                 <button>
                     Edit book
