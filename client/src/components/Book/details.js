@@ -4,6 +4,10 @@ import { useParams, Link } from 'react-router-dom';
 function BookDetails() {
     const { authorId, bookId } = useParams();
     const [bookDetails, setBookDetails] = useState({});
+    const [salesPerYearCollapsed, setSalesPerYearCollapsed] = useState(true);
+    const toggleSalesPerYear = () => {
+        setSalesPerYearCollapsed(!salesPerYearCollapsed);
+    };
 
     useEffect(() => {
         const getBookDetails = async () => {
@@ -22,7 +26,6 @@ function BookDetails() {
         });
 
         if (response.ok) {
-            // Si la eliminación fue exitosa, actualiza la lista de reviews
             setBookDetails({
                 ...bookDetails,
                 reviews: bookDetails.reviews.filter((review) => review._id !== reviewId),
@@ -33,18 +36,50 @@ function BookDetails() {
         }
     };
 
+    const handleDeleteSale = async (saleId) => {
+        try {
+            const response = await fetch(`/api/authors/${authorId}/books/${bookId}/sales/${saleId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                const updatedBookDetails = { ...bookDetails };
+                updatedBookDetails.salesPerYear = updatedBookDetails.salesPerYear.filter(sale => sale._id !== saleId);
+                setBookDetails(updatedBookDetails);
+            } else {
+                console.error('Error deleting sale');
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
 
     return (
         <div>
             <h1>Name: {bookDetails.name}</h1>
             <p>Summary: {bookDetails.summary}</p>
             <p>Date of publication: {bookDetails.dateOfPublication}</p>
-            <p>Number of sales: {bookDetails.salesPerYear ? bookDetails.salesPerYear.reduce((total, yearSales) => total + yearSales.sales, 0) : 'Loading...'}</p>
+            <p>Total sales: {bookDetails.salesPerYear ? bookDetails.salesPerYear.reduce((total, yearSales) => total + yearSales.sales, 0) : 'Loading...'}</p>
             <Link to={`/authors/${authorId}/books/${bookId}/edit`}>
                 <button>
-                    Edit
+                    Edit book
                 </button>
             </Link>
+            <p onClick={toggleSalesPerYear} style={{ cursor: 'pointer' }}>
+                Sales per year: {salesPerYearCollapsed ? '+' : '-'}
+            </p>
+            {salesPerYearCollapsed ? null : (
+                <ul>
+                    {bookDetails.salesPerYear && bookDetails.salesPerYear.map(sale => (
+                        <li key={sale.year}>
+                            <p>{sale.year} -{'->'} {sale.sales} sales.</p>
+                            <button>Edit</button>
+                            <button onClick={() => handleDeleteSale(sale._id)}>Delete Sale</button>
+                        </li>
+                    ))}
+                </ul>
+            )}
             <h2>Reviews:</h2>
             <ul>
                 {bookDetails.reviews && bookDetails.reviews.map(review => (

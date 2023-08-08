@@ -237,9 +237,7 @@ app.get('/api/authors/:authorId/books/:bookId/reviews/:reviewId', async (req, re
         const { authorId, bookId, reviewId } = req.params;
         const author = await myDatabase.get(authorId);
         const book = author.books.find(book => book._id === bookId);
-
         const review = book.reviews.find(review => review._id === reviewId);
-
         res.send(review);
     } catch (error) {
         console.error('Error deleting review', error);
@@ -325,6 +323,59 @@ app.patch('/api/authors/:authorId/books/:bookId/reviews/:reviewId/edit', async (
     } catch (error) {
         console.error('Error updating review', error);
         res.status(500).send('Error updating review');
+    }
+});
+
+
+// ███████  █████  ██      ███████ ███████ 
+// ██      ██   ██ ██      ██      ██      
+// ███████ ███████ ██      █████   ███████ 
+//      ██ ██   ██ ██      ██           ██ 
+// ███████ ██   ██ ███████ ███████ ███████ 
+
+app.get('/api/authors/:authorId/books/:bookId/sales/:saleId', async (req, res) => {
+    try {
+        const { authorId, bookId, saleId } = req.params;
+        const author = await myDatabase.get(authorId);
+        const book = author.books.find(book => book._id === bookId);
+        const sale = book.salesPerYear.find(sale => sale._id === saleId);
+        res.send(sale);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Internal server error' });
+    }
+});
+
+app.patch('/api/authors/:authorId/books/:bookId/sales/:saleId/new', async (req, res) => {
+    try {
+        const { authorId, bookId, saleId } = req.params;
+        const newSale = req.body;
+        const author = await myDatabase.get(authorId);
+        const book = author.books.find(book => book._id === bookId);
+        if (!book.salesPerYear) {
+            book.salesPerYear = [];
+        }
+        book.salesPerYear.push(newSale);
+        res.json(response);
+    } catch (error) {
+        console.error('Error adding new sale', error);
+        res.status(500).send('Error adding new sale');
+    }
+});
+
+
+app.delete('/api/authors/:authorId/books/:bookId/sales/:saleId', async (req, res) => {
+    try {
+        const { authorId, bookId, saleId } = req.params;
+        const author = await myDatabase.get(authorId);
+        const book = author.books.find(book => book._id === bookId);
+        book.salesPerYear = book.salesPerYear.filter(sale => sale._id !== saleId);
+        const response = await myDatabase.insert(author); // Actualiza los datos en la base de datos
+
+        res.json(response);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Internal server error' });
     }
 });
 
