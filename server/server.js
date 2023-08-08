@@ -353,6 +353,9 @@ app.patch('/api/authors/:authorId/books/:bookId/sales/new', async (req, res) => 
         const author = await myDatabase.get(authorId);
         const book = author.books.find(book => book._id === bookId);
         book.salesPerYear.push(newSale);
+
+        const response = await myDatabase.insert(author);
+
         res.json({message: 'Sale added'});
     } catch (error) {
         console.error('Error adding new sale', error);
@@ -399,6 +402,8 @@ app.patch('/api/authors/:authorId/books/:bookId/sales/:saleId/edit', async (req,
             return;
         }
         book.salesPerYear[saleIndex] = updatedSale;
+
+        
         const response = await myDatabase.insert(author);
         res.json(response);
     } catch (error) {
