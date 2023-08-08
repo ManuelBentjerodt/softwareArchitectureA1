@@ -10,12 +10,12 @@
                 "_id": "8c934cd2-4cd6-4f86-b6f7-6a414ad9b0ee",
                 "name": "Gold",
                 "summary": "Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.\n\nInteger ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.",
-                "dateOfPublication": "10/18/2008",
+                "dateOfPublication": "10/18/2016",
                 "salesPerYear": [
                     {
                         "_id": "8982396b-c191-412c-bd9f-bba1d335c42f",
                         "year": 2016,
-                        "sales": 664433
+                        "sales": 99999999
                     },
                     {
                         "_id": "e5453b7c-f8f4-4c19-b6db-d1683a90b687",

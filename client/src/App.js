@@ -12,6 +12,7 @@ import GoBack from './components/goBack';
 import Index from './components/index';
 import AuthorsTable from './components/Table/authorsTable';
 import TopRated from './components/Table/topRatedsTable';
+import Top50 from './components/Table/top50';
 import SearchWindows from './components/Table/searchWindows';
 import EditBook from './components/Book/edit';
 
@@ -34,6 +35,7 @@ function App() {
 
         <Route path="authorsTable" element={<AuthorsTable/>} />
         <Route path="/books/top" element={<TopRated />} />
+        <Route path="/books/top50" element={<Top50 />} />
 
         <Route path="/search" element={<SearchWindows />} />
         
