@@ -67,19 +67,29 @@ function BookDetails() {
                 </button>
             </Link>
             <p onClick={toggleSalesPerYear} style={{ cursor: 'pointer' }}>
-                Sales per year: {salesPerYearCollapsed ? '+' : '-'}
+                Sales per year: {salesPerYearCollapsed ? '🔽' : '🔼'}
             </p>
             {salesPerYearCollapsed ? null : (
+                <>
                 <ul>
                     {bookDetails.salesPerYear && bookDetails.salesPerYear.map(sale => (
                         <li key={sale.year}>
                             <p>{sale.year} -{'->'} {sale.sales} sales.</p>
-                            <button>Edit</button>
-                            <button onClick={() => handleDeleteSale(sale._id)}>Delete Sale</button>
+                            <Link to={`/authors/${authorId}/books/${bookId}/sales/${sale._id}/edit`}>
+                                <button>
+                                    Edit
+                                </button>
+                            </Link>
+                            <button onClick={() => handleDeleteSale(sale._id)}>Delete</button>
                         </li>
                     ))}
                 </ul>
+                <Link to={`/authors/${authorId}/books/${bookId}/sales/new`}>
+                    Create sale
+                </Link>
+                </>
             )}
+            
             <h2>Reviews:</h2>
             <ul>
                 {bookDetails.reviews && bookDetails.reviews.map(review => (

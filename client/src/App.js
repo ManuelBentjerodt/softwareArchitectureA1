@@ -15,6 +15,8 @@ import TopRated from './components/Table/topRatedsTable';
 import Top50 from './components/Table/top50';
 import SearchWindows from './components/Table/searchWindows';
 import EditBook from './components/Book/edit';
+import EditSale from './components/Sale/edit';
+import CreateSale from './components/Sale/create';
 
 
 function App() {
@@ -32,6 +34,9 @@ function App() {
         <Route path="/authors/:authorId/books/new" element={<CreateBook />} />
         <Route path="/authors/:authorId/books/:bookId/reviews/new" element={<CreateReview />} />
         <Route path="/authors/:authorId/books/:bookId/reviews/:reviewId/edit" element={<EditReview />} />
+        <Route path="/authors/:authorId/books/:bookId/sales/new" element={<CreateSale />} />
+        <Route path="/authors/:authorId/books/:bookId/sales/:saleId/edit" element={<EditSale />} />
+
 
         <Route path="authorsTable" element={<AuthorsTable/>} />
         <Route path="/books/top" element={<TopRated />} />

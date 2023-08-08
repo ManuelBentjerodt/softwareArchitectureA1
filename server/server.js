@@ -346,17 +346,14 @@ app.get('/api/authors/:authorId/books/:bookId/sales/:saleId', async (req, res) =
     }
 });
 
-app.patch('/api/authors/:authorId/books/:bookId/sales/:saleId/new', async (req, res) => {
+app.patch('/api/authors/:authorId/books/:bookId/sales/new', async (req, res) => {
     try {
-        const { authorId, bookId, saleId } = req.params;
+        const { authorId, bookId } = req.params;
         const newSale = req.body;
         const author = await myDatabase.get(authorId);
         const book = author.books.find(book => book._id === bookId);
-        if (!book.salesPerYear) {
-            book.salesPerYear = [];
-        }
         book.salesPerYear.push(newSale);
-        res.json(response);
+        res.json({message: 'Sale added'});
     } catch (error) {
         console.error('Error adding new sale', error);
         res.status(500).send('Error adding new sale');
