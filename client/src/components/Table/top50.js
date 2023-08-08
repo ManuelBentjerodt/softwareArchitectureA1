@@ -49,7 +49,7 @@ function TopBooksTable() {
                     accessor: 'col3',
                 },
                 {
-                    Header: "Author's total sales",
+                    Header: "Authors' total sales",
                     accessor: 'col4',
                     
                 },
