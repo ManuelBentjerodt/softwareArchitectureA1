@@ -370,8 +370,7 @@ app.delete('/api/authors/:authorId/books/:bookId/sales/:saleId', async (req, res
         const author = await myDatabase.get(authorId);
         const book = author.books.find(book => book._id === bookId);
         book.salesPerYear = book.salesPerYear.filter(sale => sale._id !== saleId);
-        const response = await myDatabase.insert(author); // Actualiza los datos en la base de datos
-
+        const response = await myDatabase.insert(author);
         res.json(response);
     } catch (error) {
         console.error(error);
@@ -379,14 +378,43 @@ app.delete('/api/authors/:authorId/books/:bookId/sales/:saleId', async (req, res
     }
 });
 
-
+app.patch('/api/authors/:authorId/books/:bookId/sales/:saleId/edit', async (req, res) => {
+    try {
+        const { authorId, bookId, saleId } = req.params;
+        const updatedSale = req.body;
+        const author = await myDatabase.get(authorId);
+        if (!author.books) {
+            res.status(404).send('No books found for this author');
+            return;
+        }
+        const book = author.books.find(book => book._id === bookId);
+        if (!book) {
+            res.status(404).send('Book not found');
+            return;
+        }
+        if (!book.salesPerYear) {
+            res.status(404).send('No sales found for this book');
+            return;
+        }
+        const saleIndex = book.salesPerYear.findIndex(sale => sale._id === saleId);
+        if (saleIndex === -1) {
+            res.status(404).send('Sale not found');
+            return;
+        }
+        book.salesPerYear[saleIndex] = updatedSale;
+        const response = await myDatabase.insert(author);
+        res.json(response);
+    } catch (error) {
+        console.error('Error updating sale', error);
+        res.status(500).send('Error updating sale');
+    }
+});
 
 // █▀▀ █ █ ▀▀█▀▀ █▀▀█ █▀▀█ 
 // █▀▀ ▄▀▄   █   █▄▄▀ █▄▄█ 
 // ▀▀▀ ▀ ▀   ▀   ▀  ▀ ▀  ▀
 
 app.post('/api/populate', async (req, res) => {
-
     try {
         const fs = require('fs');
         fs.readFile('MOCK_DATA.json', 'utf8', (err, data) => {
@@ -395,7 +423,6 @@ app.post('/api/populate', async (req, res) => {
                 res.status(500).send('Error reading data file');
             } else {
                 const dataObj = JSON.parse(data);
-
                 myDatabase.bulk({docs: dataObj}, function(err, result) {
                     if (err) {
                         console.error('Error populating database', err);
@@ -416,18 +443,14 @@ app.post('/api/populate', async (req, res) => {
 app.get('/api/search/:query', async (req, res) => {
     try {
         const { query } = req.params;
-
         // Divide la cadena de consulta en palabras individuales
         const words = query.split(' ');
-
         const authors = await myDatabase.list({ include_docs: true });
-
         const matchingBooks = authors.rows.flatMap(author => 
             author.doc.books
                 .filter(book => words.every(word => book.summary.includes(word)))
                 .map(book => ({...book, authorId: author.id}))
         );
-
         res.json(matchingBooks);
     } catch (error) {
         console.error('Error searching books', error);
@@ -435,8 +458,4 @@ app.get('/api/search/:query', async (req, res) => {
     }
 });
 
-
-
-
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
-
