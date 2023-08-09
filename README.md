@@ -21,9 +21,6 @@ To run the program, open 2 terminals, one in the client folder and the other in 
 npm start
 ```
 
-Once in the main screem click on "Populate" to fill the database with fakedata
+## 3. Important
 
-For admin usage enter the following link and insert your CouchDB credentials:
-```
-http://localhost:5984/_utils/
-```
+This application uses CouchDB as a database manager. To use it, create a .env file and declare the variables COUCH_DB_URL and PORT for the Express.js port (Step 1.). Make sure CouchDB is running. If you don't have it installed, you can find it [here](https://couchdb.apache.org/#download).
