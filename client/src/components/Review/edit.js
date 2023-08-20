@@ -33,7 +33,6 @@ const EditReview = () => {
                 body: JSON.stringify(review),
             });
             const body = await response.json();
-            console.log(body);
         };
         updateReview();
         navigate(-1);

@@ -23,7 +23,6 @@ const CreateReview = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(authorId);
         const createReview = async () => {
             const response = await fetch(`/api/authors/${authorId}/books/${bookId}/reviews/new`, {
                 method: 'PATCH',
@@ -33,7 +32,6 @@ const CreateReview = () => {
                 body: JSON.stringify(review),
             });
             const body = await response.json();
-            console.log(body);
         };
 
         createReview();

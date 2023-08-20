@@ -25,7 +25,6 @@ const CreateBook = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        console.log(authorId);
         const createBook = async () => {
             const response = await fetch(`/api/authors/${authorId}/books`, {
                 method: 'PATCH',
@@ -35,9 +34,7 @@ const CreateBook = () => {
                 body: JSON.stringify(book),
             });
             const body = await response.json();
-            console.log(body);
         };
-        console.log("createBook");
         createBook();
         navigate(-1);
     };

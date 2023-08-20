@@ -32,7 +32,6 @@ function Search() {
         const searchBooks = async () => {
             const response = await fetch(`/api/search/${query}`);
             const data = await response.json();
-            console.log(data);
             setBooks(data);
         };
         searchBooks();

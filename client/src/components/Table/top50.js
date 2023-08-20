@@ -79,7 +79,6 @@ function TopBooksTable() {
             )
             .sort((a, b) => b.totalSales - a.totalSales)
             .slice(0, 50);
-            console.log(topBooksData);
             const formattedTopBooks = topBooksData.map(item => {    
                 return {
                     col1: item.book.name,

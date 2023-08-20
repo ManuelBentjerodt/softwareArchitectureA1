@@ -13,7 +13,6 @@ function Populate() {
 
             const data = await response.json();
 
-            console.log(data);
         } catch (error) {
             console.error('Error adding new author', error);
         }

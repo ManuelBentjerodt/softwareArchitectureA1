@@ -34,7 +34,6 @@ const EditBook = () => {
                 body: JSON.stringify(book),
             });
             const body = await response.json();
-            console.log(body);
         };
         updateBook();
         navigate(-1);

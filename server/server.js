@@ -15,6 +15,7 @@ app.use(cors({
 const PORT = process.env.EXPRESS_PORT;
 const COUCH_DB_URL = process.env.COUCH_DB_URL;
 
+
 const nano = require('nano')(COUCH_DB_URL);
 
 // Asegúrate de que tu base de datos exista. Si no existe, créala.
@@ -441,7 +442,6 @@ app.post('/api/populate', async (req, res) => {
         const fs = require('fs');
         fs.readFile('MOCK_DATA.json', 'utf8', (err, data) => {
             if (err) {
-                console.log(err);
                 res.status(500).send('Error reading data file');
             } else {
                 const dataObj = JSON.parse(data);

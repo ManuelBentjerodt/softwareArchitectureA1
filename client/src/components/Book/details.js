@@ -14,7 +14,6 @@ function BookDetails() {
             const response = await fetch(`/api/authors/${authorId}/books/${bookId}`);
             const body = await response.json();
             setBookDetails(body);
-            console.log(body)
         };
         getBookDetails();
 
