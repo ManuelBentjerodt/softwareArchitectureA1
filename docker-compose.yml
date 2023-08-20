@@ -26,23 +26,6 @@ services:
       context: ./client  # Cambia esta ruta al directorio donde tienes el Dockerfile y los archivos de tu aplicación React.
       dockerfile: Dockerfile
     ports:
-      - "3000:80"
+      - "3000:3000"
     depends_on:
       - express-backend
-      
-
-
-# inicia todos los servicios:
-# docker-compose up -d
-
-# Si deseas ejecutarlo en segundo plano:
-# docker-compose up -d
-
-# Detener todos los servicios:
-# docker-compose down
-
-# Ver logs de un servicio en particular:
-# docker-compose logs express-backend
-
-# Reconstruir una imagen (útil si cambias tu Dockerfile):
-# docker-compose build express-backend

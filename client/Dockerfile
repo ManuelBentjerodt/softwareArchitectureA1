@@ -1,5 +1,5 @@
 # Establece la imagen base
-FROM node:20 AS build-stage
+FROM node:20
 
 # Crea un directorio de trabajo
 WORKDIR /app
@@ -13,23 +13,8 @@ RUN npm install
 # Copia los demás archivos de tu proyecto
 COPY . .
 
-COPY default.conf /etc/nginx/conf.d/default.conf
+# Exponer el puerto que utiliza el servidor de desarrollo (por defecto 3000 para create-react-app)
+EXPOSE 3000
 
-# Construye la aplicación React para producción
-RUN npm run build
-
-# Fase de producción: usar nginx para servir la aplicación construida
-FROM nginx:stable-alpine
-
-# Copia los archivos construidos desde la etapa de construcción
-COPY --from=build-stage /app/build /usr/share/nginx/html
-
-# Expone el puerto 80 (nginx por defecto utiliza el puerto 80)
-EXPOSE 80
-
-# Comando por defecto de nginx para iniciar el servidor
-CMD ["nginx", "-g", "daemon off;"]
-
-
-# docker build -t my_react_app_image .
-# docker run -p 8080:80 -d --name my_react_app_container my_react_app_image
+# Comando para iniciar la aplicación React en modo de desarrollo
+CMD ["npm", "start"]

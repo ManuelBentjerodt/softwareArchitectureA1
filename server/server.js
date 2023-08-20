@@ -7,7 +7,10 @@ const bodyParser = require('body-parser');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
+
 
 const PORT = process.env.EXPRESS_PORT;
 const COUCH_DB_URL = process.env.COUCH_DB_URL;
@@ -53,7 +56,6 @@ const myDatabase = nano.use(dbName);
 
 app.get('/api/authors/all', (req, res) => {
     myDatabase.list({ include_docs: true }).then(body => {
-        console.log('All documents');
         res.send(body);
     }).catch(error => {
         console.error('Error retrieving documents', error);
@@ -448,7 +450,6 @@ app.post('/api/populate', async (req, res) => {
                         console.error('Error populating database', err);
                         res.status(500).send('Error populating database');
                     } else {
-                        console.log(result);
                         res.status(200).send('Data populated successfully');
                     }
                 });
