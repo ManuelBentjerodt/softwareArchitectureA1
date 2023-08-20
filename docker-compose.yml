@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  # Servicio para CouchDB
+  couchdb:
+    image: couchdb:latest
+    environment:
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: admin
+    ports:
+      - "5984:5984"
+
+  # Servicio para la aplicación Express (Node.js)
+  express-backend:
+    build:
+      context: ./server  # Asegúrate de cambiar esta ruta al directorio donde tienes el Dockerfile y los archivos de tu aplicación Express.
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - couchdb
+
+  # Servicio para la aplicación React
+  react-frontend:
+    build:
+      context: ./client  # Cambia esta ruta al directorio donde tienes el Dockerfile y los archivos de tu aplicación React.
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - express-backend
+      
+
+
+# inicia todos los servicios:
+# docker-compose up -d
+
+# Si deseas ejecutarlo en segundo plano:
+# docker-compose up -d
+
+# Detener todos los servicios:
+# docker-compose down
+
+# Ver logs de un servicio en particular:
+# docker-compose logs express-backend
+
+# Reconstruir una imagen (útil si cambias tu Dockerfile):
+# docker-compose build express-backend

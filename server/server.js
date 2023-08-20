@@ -1,11 +1,13 @@
-require('dotenv').config({ path: '../.env' })
+require('dotenv').config()
 
-
+const cors = require('cors');
 const express = require('express');
+const retry = require('retry');
 const bodyParser = require('body-parser');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 const PORT = process.env.EXPRESS_PORT;
 const COUCH_DB_URL = process.env.COUCH_DB_URL;
@@ -15,14 +17,30 @@ const nano = require('nano')(COUCH_DB_URL);
 // Asegúrate de que tu base de datos exista. Si no existe, créala.
 const dbName = 'assignament1';
 
-nano.db.create(dbName).then(response => {
-    console.log('Database created!');
-}).catch(error => {
-    if (error.statusCode === 412) {
-        console.log('Database already exists.');
-    } else {
-        console.error('Error creating database', error);
-    }
+const operation = retry.operation({
+    retries: 5,      // Número de intentos de reintento antes de fallar definitivamente
+    minTimeout: 500, // El número de milisegundos antes del primer intento de reintento
+    maxTimeout: 3000 // El número de milisegundos antes del último intento de reintento
+});
+
+
+operation.attempt(function(currentAttempt) {
+    nano.db.create(dbName)
+        .then(response => {
+            console.log('Database created!');
+        })
+        .catch(error => {
+            if (error.statusCode === 412) {
+                console.log('Database already exists.');
+                // Si la base de datos ya existe, no necesitas reintentar
+                return;
+            } else if (operation.retry(error)) {
+                console.error(`Falló el intento #${currentAttempt} de conexión a CouchDB. Reintentando...`);
+                return;
+            } else {
+                console.error('Error creating database', error);
+            }
+        });
 });
 
 // Ahora, obtén una referencia a tu base de datos.
